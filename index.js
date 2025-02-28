@@ -6,8 +6,9 @@ const PORT = parseInt(process.env.PORT) || 8800;
 
 app.use(express.json());
 
-// import dotenv 
+// import dotenv
 require("dotenv").config();
+
 // mongodb connetion with mongoose
 const mongoose = require("mongoose");
 const uri = process.env.DB_CONNECT;
@@ -32,6 +33,11 @@ run().catch(console.dir);
 app.get("/", (req, res) => {
   res.send("Hello World");
 });
+
+
+app.use("/api/user", userRouter);
+
+
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
