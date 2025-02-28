@@ -1,14 +1,19 @@
 // object validation using JSON schema
-const jsonschema = require("jsonschema");
+// const jsonschema = require("jsonschema");
+
+// mongoose model
+const Users = require("../models/user.schema");
 
 // créer un utilisateur en base
-const createUser = (req, res, next) => {
-  let validator = new jsonschema.Validator();
-  let result = validator.validate(req.body, createUser_Schema);
-  if (result.errors.length) {
-    return res.sendStatus(500);
+const createUser = async (req, res, next) => {
+  try {
+    const user = new Users(req.body);
+    await user.save();
+    res.status(201).json({ message: "User created successfully", user });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return res.status(400).json({ errors: error.message });
   }
-  next();
 };
 
 // obtenir tous les utilisateurs en base

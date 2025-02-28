@@ -4,9 +4,10 @@ const app = express();
 
 const PORT = parseInt(process.env.PORT) || 8800;
 
+const userRouter = require("./routes/user");
+
 app.use(express.json());
 
-// import dotenv
 require("dotenv").config();
 
 // mongodb connetion with mongoose
@@ -23,21 +24,17 @@ async function run() {
     console.log(
       "Pinged your deployment. You successfully connected to MongoDB!"
     );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await mongoose.disconnect();
+  } catch (error) {
+    console.error("Error connecting to MongoDB:", error);
   }
 }
 run().catch(console.dir);
 
-app.get("/", (req, res) => {
+app.get("/api", (req, res) => {
   res.send("Hello World");
 });
 
-
 app.use("/api/user", userRouter);
-
-
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
